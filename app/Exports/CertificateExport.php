@@ -19,17 +19,19 @@ class CertificateExport implements FromCollection, WithHeadings
     {
         return [
             'DB ID',
-            'Certificate Number',
-            'Participant Name',
-            'Passport/NID',
-            'Driving License',
-            'Company',
-            'Training Name',
+            'client_name',
+            'Client',
+            'Inspection Type',
             'Location',
-            'Trainer',
-            'Training Date',
-            'Issue Date',
-            'Expiry Date',
+            'Equipment Name',
+            'Brand/Manufacturer',
+            'Serial/Chassis no.',
+            'Rated Capacity',
+            'SWL',
+            'Inspection Date',
+            'Validity Date',
+            'Inspection Remarks',
+            'Internal Notes',
             'Created by',
             'Updated by',
             'Deleted by',
@@ -39,3 +41,20 @@ class CertificateExport implements FromCollection, WithHeadings
         ];
     }
 }
+
+certificate_number
+client_name
+inspection_type
+inspection_location
+equipment_name
+equipment_brand
+equipment_serial_chassis
+equipment_rated_capacity
+equipment_swl
+inspection_date
+validity_date
+inspection_remarks
+inspection_internal_notes
+created_by
+updated_by
+deleted_by
