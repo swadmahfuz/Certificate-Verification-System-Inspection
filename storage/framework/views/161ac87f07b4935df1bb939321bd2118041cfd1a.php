@@ -75,12 +75,16 @@
       <?php if(isset($certificates)): ?>
       <div style="margin-right: 100px;">
       <?php if($certificates->count() < 1): ?>
-        <h3>❌ The Certificate You Entered is Invalid or Manipulated. Please contact TUV Austria for futher inquiry. ❌</h3>
+        <h3 >⚠️ The Certificate You Entered is Invalid or Manipulated. Please contact TUV Austria for futher inquiry. ⚠️</h3>
       <?php endif; ?>
       <?php $__currentLoopData = $certificates; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $certificate): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
         <div>
-              <h3>Certificate Authentic! ✅</h3>
+              <?php if(\Carbon\Carbon::parse($certificate->expiry_date)->isPast()): ?>
+                  <h3 style="color: red;">Certificate Authentic but Expired! ⚠️</h3>
+              <?php else: ?>
+                  <h3 style="color: green;">Certificate Authentic and Valid! ✅</h3>
+              <?php endif; ?>
               <br>
               <table style="width: 100%; border-collapse: collapse;">
                   <tr>
