@@ -14,7 +14,7 @@
                 <h3 style="padding-bottom: 5px">Import/Export Certificate Data</h3>
                 <a href="dashboard" class="btn btn-primary">Dashboard</a>
                 <a class="btn btn-warning" href="{{ route('export') }}">Export Database</a>
-                <a href="./downloads/Inspection Data Import Template.xlsx" class="btn btn-success" download="Inspection Data Import Template.xlsx">Download Data Import Template</a>
+                <a href="./downloads/Inspection Data Import Template.xlsx" class="btn btn-success" download="CVS Inspection Data Import Template.xlsx">Download Data Import Template</a>
                 <a href="logout" class="btn btn-danger">Log Out</a>
             </center>
         </div>
@@ -29,6 +29,6 @@
         </div>
     </div>
 </div>
-   
 </body>
+<footer> @include('layouts.footer')  <!-- Including the footer Blade file --> </footer>
 </html>

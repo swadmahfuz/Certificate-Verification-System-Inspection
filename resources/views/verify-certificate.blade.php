@@ -11,7 +11,7 @@
     <title>Certificate Verification</title>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <link
-      href=<?php echo e(URL::asset('public/main.css')); ?> 
+      href={{ URL::asset('public/main.css'); }} 
       rel="stylesheet"
       type="text/css"
     />
@@ -72,85 +72,83 @@
           <div>Oops! Something went wrong while submitting the form.</div>
         </div>
       </div>
-      <?php if(isset($certificates)): ?>
+      @isset($certificates)
       <div style="margin-right: 100px;">
-      <?php if($certificates->count() < 1): ?>
-        <h3>❌ The Certificate You Entered is Invalid or Manipulated. Please contact TUV Austria for futher inquiry. ❌</h3>
-      <?php endif; ?>
-      <?php $__currentLoopData = $certificates; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $certificate): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+      @if($certificates->count() < 1)
+        <h3 >⚠️ The Certificate You Entered is Invalid or Manipulated. Please contact TUV Austria for futher inquiry. ⚠️</h3>
+      @endif
+      @foreach ($certificates as $certificate)
 
         <div>
-              <h3>Certificate Authentic! ✅</h3>
-              <br>
-              <?php if(\Carbon\Carbon::parse($certificate->expiry_date)->isPast()): ?>
-                  <h3 style="color: red;">Certificate Expired</h3>
-              <?php else: ?>
-                  <h3 style="color: green;">Certificate Valid</h3>
-              <?php endif; ?>
+              @if (\Carbon\Carbon::parse($certificate->expiry_date)->isPast())
+                  <h3 style="color: red;">Certificate Authentic but Expired! ⚠️</h3>
+              @else
+                  <h3 style="color: green;">Certificate Authentic and Valid! ✅</h3>
+              @endif
               <br>
               <table style="width: 100%; border-collapse: collapse;">
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Certificate Number</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3><?php echo e($certificate->certificate_number); ?></h3></td>
+                      <td style="padding: 6px;"><h3>{{ $certificate->certificate_number }}</h3></td>
                   </tr>
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Client</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3><?php echo e($certificate->client_name); ?></h3></td>
+                      <td style="padding: 6px;"><h3>{{ $certificate->client_name }}</h3></td>
                   </tr>
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Inspection Type</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3><?php echo e($certificate->inspection_type); ?></h3></td>
+                      <td style="padding: 6px;"><h3>{{ $certificate->inspection_type }}</h3></td>
                   </tr>
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Inspection Location</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3><?php echo e($certificate->inspection_location); ?></h3></td>
+                      <td style="padding: 6px;"><h3>{{ $certificate->inspection_location }}</h3></td>
                   </tr>
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Equipment/Item</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3><?php echo e($certificate->equipment_name); ?></h3></td>
+                      <td style="padding: 6px;"><h3>{{ $certificate->equipment_name }}</h3></td>
                   </tr>
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Manufacturer</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3><?php echo e($certificate->equipment_brand); ?></h3></td>
+                      <td style="padding: 6px;"><h3>{{ $certificate->equipment_brand }}</h3></td>
                   </tr>
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Serial/Chassis No.</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3><?php echo e($certificate->equipment_serial_chassis); ?></h3></td>
+                      <td style="padding: 6px;"><h3>{{ $certificate->equipment_serial_chassis }}</h3></td>
                   </tr>
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Rated Capacity</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3><?php echo e($certificate->equipment_rated_capacity); ?></h3></td>
+                      <td style="padding: 6px;"><h3>{{ $certificate->equipment_rated_capacity }}</h3></td>
                   </tr>
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Safe Working Load</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3><?php echo e($certificate->equipment_swl); ?></h3></td>
+                      <td style="padding: 6px;"><h3>{{ $certificate->equipment_swl }}</h3></td>
                   </tr>
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Inspection Date</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3><?php echo e($certificate->inspection_date); ?></h3></td>
+                      <td style="padding: 6px;"><h3>{{ $certificate->inspection_date }}</h3></td>
                   </tr>
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Valid till</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3><?php echo e($certificate->validity_date); ?></h3></td>
+                      <td style="padding: 6px;"><h3>{{ $certificate->validity_date }}</h3></td>
                   </tr>
               </table>
         </div>
       
-      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+      @endforeach
       </div>
-      <?php endif; ?>
+      @endisset
     </div>
+    @include('layouts.footer')  <!-- Including the footer Blade file -->
   </body>
 </html>
-<?php /**PATH D:\xampp\htdocs\verify-cert-inspection\resources\views//verify.blade.php ENDPATH**/ ?>

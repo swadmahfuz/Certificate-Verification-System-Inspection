@@ -18,10 +18,10 @@ class CertificateController extends Controller
     public function search(Request $request)
     {
         if ($request->search == null) {
-            return view('/verify');
+            return view('/verify-certificate');
         }
         $certificate = Certificate::where('certificate_number','=',($request->search))->paginate(1);
-        return view('verify',['certificates'=>$certificate]);
+        return view('verify-certificate',['certificates'=>$certificate]);
     }
 
     ///Authentication functions
@@ -182,8 +182,8 @@ class CertificateController extends Controller
             $certificate = Certificate::find($id);
             $certificate_number = $certificate->certificate_number . " (Deleted)";
             $deleted_by = Auth::user()->name;
-            DB::table('certificates')->where('id', $id)->update(array('certificate_number' => $certificate_number)); ///Concat "(Deleted)" with cert number to prevent duplicate certificate number error. 
-            DB::table('certificates')->where('id', $id)->update(array('deleted_by' => $deleted_by));    ///Add user's name to deleted by column.
+            DB::table('inspection_certificates')->where('id', $id)->update(array('certificate_number' => $certificate_number)); ///Concat "(Deleted)" with cert number to prevent duplicate certificate number error. 
+            DB::table('inspection_certificates')->where('id', $id)->update(array('deleted_by' => $deleted_by));    ///Add user's name to deleted by column.
             Certificate::where('id',$id)->delete();
             return back()->with('Certificate_Deleted','Certificate details has been deleted successfully');
         }
