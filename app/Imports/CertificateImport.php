@@ -17,16 +17,18 @@ class CertificateImport implements ToModel, WithHeadingRow
     {
         return new Certificate([
             'certificate_number' => $row['certificate_number'],
-            'participant_name' => $row['participant_name'],
-            'passport_nid' => $row['passport_nid'],
-            'driving_license' => $row['driving_license'],
-            'company' => $row['company'],
-            'training_name' => $row['training_name'],
-            'location' => $row['location'],
-            'trainer' => $row['trainer'],
-            'training_date' => $row['training_date'],
-            'issue_date' => $row['issue_date'],
-            'expiry_date' => $row['expiry_date'],
+            'client_name' => $row['client_name'],
+            'inspection_type' => $row['inspection_type'],
+            'inspection_location' => $row['inspection_location'],
+            'equipment_name' => $row['equipment_name'],
+            'equipment_brand' => $row['equipment_brand'],
+            'equipment_serial_chassis' => $row['equipment_serial_chassis'],
+            'equipment_rated_capacity' => $row['equipment_rated_capacity'],
+            'equipment_swl' => $row['equipment_swl'],
+            'inspection_date' => $row['inspection_date'],
+            'validity_date' => $row['validity_date'],
+            'inspection_remarks' => $row['inspection_remarks'],
+            'inspection_internal_notes' => $row['inspection_internal_notes'],
             'created_by' => $row['created_by'],
         ]);
     }

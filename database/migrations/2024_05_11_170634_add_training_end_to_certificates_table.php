@@ -14,7 +14,7 @@ The .env file for both the applications should be configured in a way so that bo
 DO NOT DELETE THIS MIGRATION FILE.
  */
 
-class CreateCertificatesTable extends Migration
+class AddTrainingEndToCertificatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -23,24 +23,8 @@ class CreateCertificatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('certificates', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('certificate_number')->unique();
-            $table->string('participant_name');
-            $table->string('passport_nid');
-            $table->string('driving_license')->nullable();
-            $table->string('company')->nullable();
-            $table->string('training_name');
-            $table->string('location');
-            $table->string('trainer');
-            $table->string('training_date');
-            $table->string('issue_date');
-            $table->string('expiry_date');
-            $table->string('created_by')->default('Bulk uploaded');
-            $table->string('updated_by')->nullable();
-            $table->string('deleted_by')->nullable();
-            $table->timestamps();
-            $table->softDeletes(); ///create 'deleted at' column
+        Schema::table('certificates', function (Blueprint $table) {
+            $table->string('training_end')->nullable()->after('training_date');
         });
     }
 
@@ -51,6 +35,8 @@ class CreateCertificatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('certificates');
+        Schema::table('certificates', function (Blueprint $table) {
+            $table->dropColumn('training_end');
+        });
     }
 }

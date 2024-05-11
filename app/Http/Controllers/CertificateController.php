@@ -194,7 +194,7 @@ class CertificateController extends Controller
     {
         if (Auth::check())
         {
-            $certificates = Certificate::where('certificate_number','=',($request->search))->orWhere('client_name','LIKE','%'.($request->search).'%')->orWhere('passport_nid','=',($request->search))->orWhere('driving_license','=',($request->search))->orWhere('company','LIKE','%'.($request->search).'%')->orWhere('equipment_serial_chassis','LIKE','%'.($request->search).'%')->paginate(100); ///search using % and LIKE to find words in query
+            $certificates = Certificate::where('certificate_number','=',($request->search))->orWhere('client_name','LIKE','%'.($request->search).'%')->orWhere('inspection_type','=',($request->search))->orWhere('inspection_location','=',($request->search))->orWhere('equipment_name','LIKE','%'.($request->search).'%')->orWhere('equipment_brand','LIKE','%'.($request->search).'%')->orWhere('equipment_serial_chassis','LIKE','%'.($request->search).'%')->orWhere('equipment_rated_capacity','LIKE','%'.($request->search).'%')->orWhere('equipment_swl','LIKE','%'.($request->search).'%')->orWhere('inspection_date','LIKE','%'.($request->search).'%')->orWhere('validity_date','LIKE','%'.($request->search).'%')->orWhere('inspection_remarks','LIKE','%'.($request->search).'%')->orWhere('inspection_internal_notes','LIKE','%'.($request->search).'%')->paginate(100); ///search using % and LIKE to find words in query
             return view('dashboard',compact('certificates'));
         }
         return redirect ('/admin');
