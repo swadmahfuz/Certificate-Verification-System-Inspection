@@ -157,7 +157,7 @@ Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 
 Swad Ahmed Mahfuz - contact@swadmahfuz.com, swad.mahfuz@gmail.com
 
-Project Link: [https://github.com/swadmahfuz/Certificate-Verification-System](https://github.com/swadmahfuz/Certificate-Verification-System)
+Project Link: [https://github.com/swadmahfuz/Certificate-Verification-System-Inspection](https://github.com/swadmahfuz/Certificate-Verification-System-Inspection)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
