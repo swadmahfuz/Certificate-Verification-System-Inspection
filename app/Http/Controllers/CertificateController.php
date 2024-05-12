@@ -168,8 +168,9 @@ class CertificateController extends Controller
             $certificate->validity_date = $request->validity_date;
             $certificate->inspection_remarks = $request->inspection_remarks;
             $certificate->inspection_internal_notes = $request->inspection_internal_notes;
+            $certificate->updated_by = Auth::user()->name;
             $certificate->save();
-            return redirect('/dashboard');
+            return redirect('/view-certificate/' . $certificate->id);
         }
         return redirect ('/admin');
     }
