@@ -54,7 +54,7 @@ class CertificateController extends Controller
     ////Admin functions
     public function getDashboard()
     {
-        if (Auth::check())
+        if (Auth::check())  
         {
             $certificates = Certificate::orderBy('inspection_date','DESC')->paginate(100); ///Sorted by inspection date
             return view('dashboard',compact('certificates'));
@@ -117,7 +117,7 @@ class CertificateController extends Controller
             $certificate->inspection_internal_notes = $request->inspection_internal_notes;
             $certificate->created_by = Auth::user()->name;
             $certificate->save();
-            return redirect('/dashboard');
+            return redirect('/view-certificate/' . $certificate->id);
         }
         return redirect ('/admin');
     }
