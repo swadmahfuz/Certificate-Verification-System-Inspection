@@ -79,8 +79,8 @@
                                             <td>{{ $certificate->certificate_number }}</td>
                                             <td>{{ $certificate->client_name }}</td>
                                             <td>{{ $certificate->inspection_type }}</td>
-                                            <td>{{ $certificate->inspection_date }}</td>
-                                            <td>{{ $certificate->validity_date }}</td>
+                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->inspection_date)->format('d-m-Y') }}</td> 
+                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->validity_date)->format('d-m-Y') }}</td> 
                                             @php
                                                 $url = url('');  ///capture server url
                                                 $verification_url = $url.'?search='.$certificate->certificate_number;   ///concat server url with verification link and certificate number

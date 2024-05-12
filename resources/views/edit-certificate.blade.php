@@ -107,12 +107,12 @@
                                         <input type="date" name="validity_date" class="form-control" placeholder="Enter Certificate Expiration Date" value="{{ $certificate->validity_date }}">
                                         <br>
 
-                                        <label for="inspection_remarks">Inspection Notes</label>
+                                        <label for="inspection_remarks">Inspection Remarks</label>
                                         <textarea name="inspection_remarks" class="form-control" placeholder="Enter any inspection remarks." rows="4">{{ $certificate->inspection_remarks }}</textarea>
                                         <br>
 
-                                        <label for="inspection_internal_notes">Inspection Notes</label>
-                                        <textarea name="inspection_internal_notes" class="form-control" placeholder="Enter any inspection notes for internal use only." rows="4">{{ $certificate->inspection_remarks }}</textarea>
+                                        <label for="inspection_internal_notes">Inspection Notes (for internal use only)</label>
+                                        <textarea name="inspection_internal_notes" class="form-control" placeholder="Enter any inspection notes for internal use only." rows="4">{{ $certificate->inspection_internal_notes }}</textarea>
                                         <br>
 
                                         

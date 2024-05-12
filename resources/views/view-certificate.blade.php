@@ -17,7 +17,8 @@
                         <div class="card">
                             <div class="card-header" ><center><h3>Detailed Certificate Information</h3></center>
                                 <center>
-                                    <a href="../dashboard" class="btn btn-primary">Go back to Dashboard</a> 
+                                    <a href="../dashboard" class="btn btn-primary">Go back to Dashboard</a>
+                                    <a href="../edit-certificate/{{ $certificate->id }}" class="btn btn-warning">Edit Certificate</a> 
                                     <a href="../delete-certificate/{{ $certificate->id }}" class="btn btn-danger">Delete Certificate</a>
                                 </center> 
                             </div>
@@ -72,11 +73,11 @@
                                     </tr>
                                     <tr>
                                         <th>Inspection Date</th>
-                                        <td>{{ $certificate->inspection_date }}</td>
+                                        <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->inspection_date)->format('d M Y') }}</td>
                                     </tr>
                                     <tr>
                                         <th>Valid Till</th>
-                                        <td>{{ $certificate->validity_date }}</td>
+                                        <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->validity_date)->format('d M Y') }}</td>
                                     </tr>
                                     <tr>
                                         <th>Inspection Remarks</th>
