@@ -60,6 +60,7 @@
                                         <th>Certificate ID</th>
                                         <th>Client</th>
                                         <th>Inspection Type</th>
+                                        <th>Serial/Chassis</th>
                                         <th>Inspection Date</th>
                                         <th>Validity</th>
                                         <th>QR Code</th>
@@ -79,6 +80,7 @@
                                             <td>{{ $certificate->certificate_number }}</td>
                                             <td>{{ $certificate->client_name }}</td>
                                             <td>{{ $certificate->inspection_type }}</td>
+                                            <td>{{ $certificate->equipment_serial_chassis }}</td>
                                             <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->inspection_date)->format('d-m-Y') }}</td> 
                                             <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->validity_date)->format('d-m-Y') }}</td> 
                                             @php
