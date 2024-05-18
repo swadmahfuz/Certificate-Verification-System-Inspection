@@ -7,6 +7,7 @@
         <title>Admin Dashboard</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
         <style>
             .table-striped tbody td, .table-striped thead th {
                 vertical-align: middle; /* Centers the content vertically in table cells */
@@ -22,7 +23,6 @@
                 border-right: none; /* Removes the border for the last header cell */
             }
         </style>
-        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     </head>
     <body background="images/tuv-login-background1.jpg">
         <section style="padding-top: 60px;">
@@ -54,56 +54,56 @@
                                     </div>
                                 @endif
                                 <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Sl.</th>
-                                        <th>Certificate ID</th>
-                                        <th>Client</th>
-                                        <th>Inspection Type</th>
-                                        <th>Serial/Chassis</th>
-                                        <th>Inspection Date</th>
-                                        <th>Validity</th>
-                                        <th>QR Code</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Get current page number and continue sl. in next page -->
-                                    @php
-                                        $currentPage = $certificates->currentPage();
-                                        $perPage = $certificates->perPage();
-                                        $offset = ($currentPage - 1) * $perPage;
-                                    @endphp
-                                    @foreach ($certificates as $certificate)
+                                    <thead>
                                         <tr>
-                                            <td>{{ $loop->iteration + $offset }}.</td> <!-- continue sl. from previous page -->
-                                            <td>{{ $certificate->certificate_number }}</td>
-                                            <td>{{ $certificate->client_name }}</td>
-                                            <td>{{ $certificate->inspection_type }}</td>
-                                            <td>{{ $certificate->equipment_serial_chassis }}</td>
-                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->inspection_date)->format('d-m-Y') }}</td> 
-                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->validity_date)->format('d-m-Y') }}</td> 
-                                            @php
-                                                $url = url('');  ///capture server url
-                                                $verification_url = $url.'?search='.$certificate->certificate_number;   ///concat server url with verification link and certificate number
-                                            @endphp
-                                            {{-- The code below uses goqr.me api to generate qr code image --}}
-                                            <td> <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ $verification_url }}"/> </td> 
-                                            <td>
-                                                {{-- Action buttons --}}
-                                                {{-- using goqr.me api to generate qr code image link--}}
-                                                <a href="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ $verification_url }}" target="_blank" style="margin-bottom: 5px"><i class="fa-solid fa-qrcode" title="Generate QR Code"></i></a>
-
-                                                <a href="view-certificate/{{ $certificate->id }}" style="margin-bottom: 5px" target="_blank"><i class="fa-solid fa-circle-info" title="View Certificate Details"></i></a>
-
-                                                <a href="edit-certificate/{{ $certificate->id }}" style="margin-bottom: 5px" target="_blank"><i class="fa-solid fa-pen-to-square" title="Edit Certificate Information"></i></a>
-
-                                                <a href="delete-certificate/{{ $certificate->id }}" style="margin-bottom: 5px"><i class="fa-solid fa-trash" title="Delete Certificate"></i></a>
-                                            </td>
+                                            <th>Sl.</th>
+                                            <th>Certificate ID</th>
+                                            <th>Client</th>
+                                            <th>Inspection Type</th>
+                                            <th>Serial/Chassis</th>
+                                            <th>Inspection Date</th>
+                                            <th>Validity</th>
+                                            <th>QR Code</th>
+                                            <th>Actions</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Get current page number and continue sl. in next page -->
+                                        @php
+                                            $currentPage = $certificates->currentPage();
+                                            $perPage = $certificates->perPage();
+                                            $offset = ($currentPage - 1) * $perPage;
+                                        @endphp
+                                        @foreach ($certificates as $certificate)
+                                            <tr>
+                                                <td>{{ $loop->iteration + $offset }}.</td> <!-- continue sl. from previous page -->
+                                                <td>{{ $certificate->certificate_number }}</td>
+                                                <td>{{ $certificate->client_name }}</td>
+                                                <td>{{ $certificate->inspection_type }}</td>
+                                                <td>{{ $certificate->equipment_serial_chassis }}</td>
+                                                <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->inspection_date)->format('d-m-Y') }}</td> 
+                                                <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->validity_date)->format('d-m-Y') }}</td> 
+                                                @php
+                                                    $url = url('');  ///capture server url
+                                                    $verification_url = $url.'?search='.$certificate->certificate_number;   ///concat server url with verification link and certificate number
+                                                @endphp
+                                                {{-- The code below uses goqr.me api to generate qr code image --}}
+                                                <td> <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ $verification_url }}"/> </td> 
+                                                <td>
+                                                    {{-- Action buttons --}}
+                                                    {{-- using goqr.me api to generate qr code image link--}}
+                                                    {{-- <a href="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ $verification_url }}" target="_blank" style="margin-bottom: 5px"><i class="fa-solid fa-qrcode" title="Generate QR Code"></i></a> --}} {{-- Not required anymore as QR Code is displayed in the table --}}
+
+                                                    <a href="view-certificate/{{ $certificate->id }}" style="margin-bottom: 5px" target="_blank"><i class="fa-solid fa-circle-info" title="View Certificate Details"></i></a>
+
+                                                    <a href="edit-certificate/{{ $certificate->id }}" style="margin-bottom: 5px" target="_blank"><i class="fa-solid fa-pen-to-square" title="Edit Certificate Information"></i></a>
+
+                                                    <a href="delete-certificate/{{ $certificate->id }}" style="margin-bottom: 5px"><i class="fa-solid fa-trash" title="Delete Certificate"></i></a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="card-footer">
                                 {{ $certificates->links() }}
