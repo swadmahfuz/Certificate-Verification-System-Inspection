@@ -34,6 +34,13 @@
                                         @enderror
                                         <input type="text" name="certificate_number" class="form-control" placeholder="Enter Certificate Number" value="">
                                         <br>
+
+                                        <label for="inspector">Inspector/Responsible Person*</label>
+                                        @error('client_name')
+                                            <span class="text-danger">{{$message}}</span> <br> 
+                                        @enderror
+                                        <input type="text" name="inspector" class="form-control" placeholder="Enter Inspector/Responsible Person" value="{{ old('client_name') }}">
+                                        <br>
                                         
                                         <label for="client_name">Client*</label>
                                         @error('client_name')

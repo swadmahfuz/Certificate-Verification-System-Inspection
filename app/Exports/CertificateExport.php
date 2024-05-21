@@ -20,6 +20,7 @@ class CertificateExport implements FromCollection, WithHeadings
         return [
             'DB ID',
             'Certificate Number',
+            'Inspector',
             'Client',
             'Inspection Type',
             'Location',

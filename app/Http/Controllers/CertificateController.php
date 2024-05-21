@@ -94,6 +94,7 @@ class CertificateController extends Controller
         {
             $validate = $request->validate([
                 'certificate_number' => 'required|unique:certificates', ///check if certificate is unique from "Certificates" table
+                'inspector' => 'required',
                 'client_name' => 'required',
                 'inspection_type' => 'required',
                 'inspection_location' => 'required',
@@ -103,6 +104,7 @@ class CertificateController extends Controller
             
             $certificate = new certificate();
             $certificate->certificate_number = $request->certificate_number;
+            $certificate->inspector = $request->inspector;
             $certificate->client_name = $request->client_name;
             $certificate->inspection_type = $request->inspection_type;
             $certificate->inspection_location = $request->inspection_location;
@@ -148,6 +150,7 @@ class CertificateController extends Controller
         {
             $validate = $request->validate([
                 'certificate_number' => 'required|unique:certificates', ///check if certificate is unique from "Certificates" table
+                'inspector' => 'required',
                 'client_name' => 'required',
                 'inspection_type' => 'required',
                 'inspection_location' => 'required',
@@ -156,6 +159,7 @@ class CertificateController extends Controller
             ]);
             $certificate = Certificate::find($request->id);
             $certificate->certificate_number = $request->certificate_number;
+            $certificate->inspector = $request->inspector;
             $certificate->client_name = $request->client_name;
             $certificate->inspection_type = $request->inspection_type;
             $certificate->inspection_location = $request->inspection_location;
@@ -191,14 +195,15 @@ class CertificateController extends Controller
         return redirect ('/admin');
     }
 
-    public function adminSearch(Request $request)
+    public function adminSearch(Request $request)       ///Not requied as Live Search is used instead
     {
         if (Auth::check())
         {
-            $certificates = Certificate::where('certificate_number','=',($request->search))
+            $certificates = Certificate::where('certificate_number', 'LIKE', '%' . ($request->search) . '%')
+            ->orWhere('inspector','LIKE','%'.($request->search).'%')
             ->orWhere('client_name','LIKE','%'.($request->search).'%')      ///search using % and LIKE to find words in query
-            ->orWhere('inspection_type','=',($request->search))
-            ->orWhere('inspection_location','=',($request->search))
+            ->orWhere('inspection_type','LIKE','%'.($request->search).'%')
+            ->orWhere('inspection_location','LIKE','%'.($request->search).'%')
             ->orWhere('equipment_name','LIKE','%'.($request->search).'%')
             ->orWhere('equipment_brand','LIKE','%'.($request->search).'%')
             ->orWhere('equipment_serial_chassis','LIKE','%'.($request->search).'%')
@@ -206,13 +211,50 @@ class CertificateController extends Controller
             ->orWhere('equipment_swl','LIKE','%'.($request->search).'%')
             ->orWhere('inspection_date','LIKE','%'.($request->search).'%')
             ->orWhere('validity_date','LIKE','%'.($request->search).'%')
-            ->orWhere('inspection_remarks','LIKE','%'.($request->search).'%')
-            ->orWhere('inspection_internal_notes','LIKE','%'.($request->search).'%')
+            /* ->orWhere('inspection_remarks','LIKE','%'.($request->search).'%')
+            ->orWhere('inspection_internal_notes','LIKE','%'.($request->search).'%') */
             ->paginate(100); 
             return view('dashboard',compact('certificates'));
         }
         return redirect ('/admin');
     }
+
+    ///Live-Search in Dashboard
+    public function liveSearch(Request $request)
+    {
+        if (Auth::check()) {
+            $perPage = 100; // Number of certificates per page
+            $userInput = $request->input('userInput', '');
+    
+            if (empty($userInput)) {
+                // If the search input is empty, return all certificates ordered by certificate_number descending with pagination
+                $result = Certificate::orderBy('certificate_number', 'desc')->paginate($perPage);
+            } else {
+                $result = Certificate::where('certificate_number', 'LIKE', '%' . $userInput . '%')
+                    ->orWhere('inspector','LIKE','%'. $userInput .'%')    
+                    ->orWhere('client_name','LIKE','%'. $userInput .'%')      ///search using % and LIKE to find words in query
+                    ->orWhere('inspection_type','LIKE','%'. $userInput .'%')
+                    ->orWhere('inspection_location','LIKE','%'. $userInput .'%')
+                    ->orWhere('equipment_name','LIKE','%'. $userInput .'%')
+                    ->orWhere('equipment_brand','LIKE','%'. $userInput .'%')
+                    ->orWhere('equipment_serial_chassis','LIKE','%'. $userInput .'%')
+                    ->orWhere('equipment_rated_capacity','LIKE','%'. $userInput .'%')
+                    ->orWhere('equipment_swl','LIKE','%'. $userInput .'%')
+                    ->orWhere('inspection_date','LIKE','%'. $userInput .'%')
+                    ->orWhere('validity_date','LIKE','%'. $userInput .'%')
+                    ->orWhere('inspector','LIKE','%'. $userInput .'%')
+                    /* ->orWhere('inspection_remarks','LIKE','%'. $userInput .'%')
+                    ->orWhere('inspection_internal_notes','LIKE','%'. $userInput .'%') */
+                    ->orderBy('certificate_number', 'desc')
+                    ->paginate($perPage); // Ensure the result is paginated
+            }
+    
+            return response()->json(['data' => $result]);
+        } else {
+            return redirect('/admin');
+        }
+    }
+    
 
     public function importExportView()
     {

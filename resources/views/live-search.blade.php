@@ -136,7 +136,7 @@
                         },
                         dataType: 'json',
                         beforeSend: function() {
-                            $(".search-result tbody").html('<tr><td colspan="9">Please wait while your query is being searched...</td></tr>');
+                            $(".search-result tbody").html('<tr><td colspan="11">Please wait while your query is being searched...</td></tr>');
                         },
                         success: function(res) {
                             var _html = '';

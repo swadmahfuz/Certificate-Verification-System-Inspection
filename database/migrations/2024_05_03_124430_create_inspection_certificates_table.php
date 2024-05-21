@@ -15,7 +15,8 @@ class CreateInspectionCertificatesTable extends Migration
     {
         Schema::create('inspection_certificates', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('certificate_number')->unique();
+            $table->string('certificate_number')->unique(); 
+            $table->string('inspector');
             $table->string('client_name');
             $table->string('inspection_type');
             $table->text('inspection_location');

@@ -76,15 +76,17 @@
       @isset($certificates)
       <div style="margin-right: 100px;">
       @if($certificates->count() < 1)
-        <h3 >⚠️ The Certificate You Entered is Invalid or Manipulated. Please contact TUV Austria for futher inquiry. ⚠️</h3>
+        <h3 style="text-align: center;">⚠️ The Certificate You Entered is Invalid or Manipulated. Please contact TUV Austria for futher inquiry. ⚠️</h3>
+        </br>
+        <h3 style="text-align: center;">⚠️ Tel: +88 02 8836403 ; Email: info@tuvat.com.bd ⚠️</h3>
       @endif
       @foreach ($certificates as $certificate)
 
-        <div>
-              @if (\Carbon\Carbon::parse($certificate->expiry_date)->isPast())
-                  <h3 style="color: red;">Certificate Authentic but Expired! ⚠️</h3>
+        <div style="padding-left: 10px; padding-right: 10px;">
+              @if (\Carbon\Carbon::parse($certificate->validity_date)->isPast())
+                  <h3 style="color: red; text-align: center;">Certificate Authentic but Expired! ⚠️</h3>
               @else
-                  <h3 style="color: green;">Certificate Authentic and Valid! ✅</h3>
+                  <h3 style="color: green; text-align: center;">Certificate Authentic and Valid! ✅</h3>
               @endif
               <br>
               <table style="width: 100%; border-collapse: collapse;">
