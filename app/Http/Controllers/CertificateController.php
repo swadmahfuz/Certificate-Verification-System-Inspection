@@ -68,7 +68,7 @@ class CertificateController extends Controller
         if (Auth::check())
         {
             $certificates = Certificate::onlyTrashed()->orderBy('inspection_date','DESC')->paginate(100);
-            return view('dashboard',compact('certificates'));
+            return view('deleted-certificates',compact('certificates'));
         }
 
         return redirect('/admin');
