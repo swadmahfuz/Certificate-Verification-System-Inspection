@@ -83,10 +83,10 @@
       @foreach ($certificates as $certificate)
 
         <div style="padding-left: 10px; padding-right: 10px;">
-              @if (\Carbon\Carbon::parse($certificate->validity_date)->isPast())
-                  <h3 style="color: red; text-align: center;">Certificate Authentic but Expired! ⚠️</h3>
-              @else
+              @if (empty($certificate->validity_date) || ! \Carbon\Carbon::parse($certificate->validity_date)->isPast())
                   <h3 style="color: green; text-align: center;">Certificate Authentic and Valid! ✅</h3>
+              @else
+                  <h3 style="color: red; text-align: center;">Certificate Authentic but Expired! ⚠️</h3>
               @endif
               <br>
               <table style="width: 100%; border-collapse: collapse;">
@@ -143,7 +143,15 @@
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Valid till</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3>{{ $certificate->validity_date }}</h3></td>
+                      <td style="padding: 6px;">
+                        <h3>
+                            @if (!empty($certificate->validity_date))
+                                {{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->validity_date)->format('d M Y') }}
+                            @else
+                                No Expiry Date
+                            @endif
+                        </h3>
+                      </td>
                   </tr>
               </table>
         </div>

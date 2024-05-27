@@ -82,7 +82,11 @@
                                     </tr>
                                     <tr>
                                         <th>Valid Till</th>
-                                        <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->validity_date)->format('d M Y') }}</td>
+                                        @if (!empty($certificate->expiry_date))
+                                            <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->validity_date)->format('d M Y') }}</td>
+                                        @else
+                                            <td>No Expiry Date</td>
+                                        @endif
                                     </tr>
                                     <tr>
                                         <th>Inspection Remarks</th>

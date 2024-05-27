@@ -100,10 +100,7 @@
                                         <input type="date" name="inspection_date" class="form-control" placeholder="Enter Inspection Date" value="{{ old('inspection_date') }}">
                                         <br> 
 
-                                        <label for="validity_date">Validity Expiration Date*</label>
-                                        @error('validity_date')
-                                            <span class="text-danger">{{$message}}</span> <br> 
-                                        @enderror
+                                        <label for="validity_date">Validity Expiration Date</label>
                                         <input type="date" name="validity_date" class="form-control" placeholder="Enter Certificate Expiration Date" value="{{ old('validity_date') }}">
                                         <br>
 
