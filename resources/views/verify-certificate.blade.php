@@ -138,7 +138,7 @@
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Inspection Date</strong></h3></td>
                       <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3>{{ $certificate->inspection_date }}</h3></td>
+                      <td style="padding: 6px;"><h3>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->inspection_date)->format('d M Y') }}</h3></td>
                   </tr>
                   <tr>
                       <td style="padding: 6px;"><h3><strong>Valid till</strong></h3></td>
