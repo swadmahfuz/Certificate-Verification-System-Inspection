@@ -92,7 +92,13 @@
                                                 <td>{{ $certificate->inspection_type }}</td>
                                                 <td>{{ $certificate->equipment_serial_chassis }}</td>
                                                 <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->inspection_date)->format('d-m-Y') }}</td> 
-                                                <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->validity_date)->format('d-m-Y') }}</td> 
+                                                <td>
+                                                    @if ($certificate->validity_date)   <!-- Checks if validity date is NULL -->
+                                                        {{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->validity_date)->format('d-m-Y') }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
                                                 @php
                                                     $url = url('');  ///capture server url
                                                     $verification_url = $url.'?search='.$certificate->certificate_number;   ///concat server url with verification link and certificate number
