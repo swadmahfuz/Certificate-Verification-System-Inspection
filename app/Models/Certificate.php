@@ -8,8 +8,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Certificate extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
-    protected $table = "inspection_certificates";
-    protected $guarded = [];  
+    use HasFactory, SoftDeletes;
+
+    protected $table = 'inspection_certificates';
+
+    protected $guarded = [];
+
+    protected $dates = [
+        'deleted_at',
+        'pdf_uploaded_at',
+        'reviewed_at',
+        'approved_at',
+    ];
 }

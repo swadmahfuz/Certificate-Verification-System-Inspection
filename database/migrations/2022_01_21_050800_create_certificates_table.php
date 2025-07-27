@@ -4,16 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/*
-Since this application shares a common database with the Training Certificate Verification System, this migration file is required in case this application is installed before installing the Training Certificate Verification System application. 
-
-Please note that the Training CVS must be installed in the same domain under a seprate sub-domain. It is recommended to install Training CVS first and then the Inspection CVS.
-
-The .env file for both the applications should be configured in a way so that both Training CVS and Inspection CVS uses the same database and SMTP credentials.
-
-DO NOT DELETE THIS MIGRATION FILE.
- */
-
 class CreateCertificatesTable extends Migration
 {
     /**
@@ -38,10 +28,25 @@ class CreateCertificatesTable extends Migration
             $table->string('issue_date');
             $table->string('expiry_date')->nullable();
             $table->string('created_by')->default('Bulk uploaded');
+
+            // 👉 Un-comment the following lines ONLY when setting up a fresh database:
+            // $table->string('created_by_id')->nullable();
+            // $table->string('review_by')->nullable(); /// User name preserved even if account name changes
+            // $table->string('review_by_id')->nullable(); /// User ID preserved
+            // $table->string('approval_by')->nullable();
+            // $table->string('approval_by_id')->nullable();
+            // $table->string('status')->default('Approved'); /// Default for migrated data
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
-            $table->timestamps();
-            $table->softDeletes(); ///create 'deleted at' column
+            // $table->string('certificate_pdf')->nullable(); /// File path of uploaded PDF
+            // $table->string('pdf_uploaded_by')->nullable(); /// Name of user who uploaded PDF
+            // $table->string('pdf_uploaded_by_id')->nullable(); /// ID of user who uploaded PDF
+            $table->timestamp('created_at');
+            // $table->timestamp('reviewed_at')->nullable();
+            // $table->timestamp('approved_at')->nullable();
+            $table->timestamp('updated_at');
+            $table->softDeletes(); // Creates 'deleted_at' column
+            // $table->timestamp('pdf_uploaded_at')->nullable(); /// Timestamp of PDF upload
         });
     }
 
