@@ -13,12 +13,12 @@ use DB;
 
 /*
 |--------------------------------------------------------------------------
-| Certificate Verification System (CVS) 
+| Inspection Certificate Verification System (CVS) 
 | TUV Austria Bureau of Inspection & Certification 
 | Developed by: Swad Ahmed Mahfuz (Head of Division - Business Assurance & Training, Bangladesh)
 | Contact: swad.mahfuz@gmail.com, +1-725-867-7718, +88 01733 023 008
 | Project Start: 12 October 2022
-| Latest Stable Release: v3.1.1 -  26 July 2025
+| Latest Stable Release: v3.1.1 -  27 July 2025
 |--------------------------------------------------------------------------
 */
 
@@ -333,7 +333,7 @@ class CertificateController extends Controller
         $user = Auth::user();
     
         // Mark all 'Pending Review' certificates assigned to the logged-in reviewer
-        $updated = DB::table('certificates')
+        $updated = DB::table('inspection_certificates')
             ->where('status', 'Pending Review')
             ->where(function ($query) use ($user) {
                 $query->where('review_by_id', $user->id)
@@ -354,7 +354,7 @@ class CertificateController extends Controller
         $user = Auth::user();
     
         // Mark all 'Pending Approval' certificates assigned to the logged-in approver
-        $updated = DB::table('certificates')
+        $updated = DB::table('inspection_certificates')
             ->where('status', 'Pending Approval')
             ->where(function ($query) use ($user) {
                 $query->where('approval_by_id', $user->id)

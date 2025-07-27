@@ -3,18 +3,34 @@
 namespace App\Imports;
 
 use App\Models\Certificate;
+use App\Models\User;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+
+/*
+|--------------------------------------------------------------------------
+| Inspection Certificate Verification System (CVS) 
+| TUV Austria Bureau of Inspection & Certification 
+| Developed by: Swad Ahmed Mahfuz (Assistant Manager - Sales & Operations, Bangladesh)
+| Contact: swad.mahfuz@gmail.com, +1-725-867-7718, +88 01733 023 008
+| Project Start: 12 October 2022
+|--------------------------------------------------------------------------
+*/
 
 class CertificateImport implements ToModel, WithHeadingRow
 {
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * Map Excel rows to Certificate model.
+     *
+     * @param array $row
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     public function model(array $row)
     {
+        $createdUser  = User::where('email', $row['created_by_email'])->first();   
+        $reviewUser   = User::where('email', $row['review_by_email'])->first();
+        $approvalUser = User::where('email', $row['approval_by_email'])->first();
+
         return new Certificate([
             'certificate_number' => $row['certificate_number'],
             'inspector' => $row['inspector'],
@@ -30,7 +46,15 @@ class CertificateImport implements ToModel, WithHeadingRow
             'validity_date' => $row['validity_date'],
             'inspection_remarks' => $row['inspection_remarks'],
             'inspection_internal_notes' => $row['inspection_internal_notes'],
-            'created_by' => $row['created_by'],
+
+            'created_by' => $createdUser ? $createdUser->name : null,
+            'created_by_id' => $createdUser ? $createdUser->id : null,
+            'review_by' => $reviewUser ? $reviewUser->name : null,
+            'review_by_id' => $reviewUser ? $reviewUser->id : null,
+            'approval_by' => $approvalUser ? $approvalUser->name : null,
+            'approval_by_id' => $approvalUser ? $approvalUser->id : null,
+
+            'status' => 'Pending Review',
         ]);
     }
 }

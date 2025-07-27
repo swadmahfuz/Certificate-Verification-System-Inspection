@@ -6,6 +6,16 @@ use App\Models\Certificate;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
+/*
+|--------------------------------------------------------------------------
+| Inspection Inspection Certificate Verification System (CVS) 
+| TUV Austria Bureau of Inspection & Certification 
+| Developed by: Swad Ahmed Mahfuz (Assistant Manager - Sales & Operations, Bangladesh)
+| Contact: swad.mahfuz@gmail.com, +1-725-867-7718, +88 01733 023 008
+| Project Start: 12 October 2022
+|--------------------------------------------------------------------------
+*/
+
 class CertificateExport implements FromCollection, WithHeadings
 {
     /**
@@ -15,28 +25,42 @@ class CertificateExport implements FromCollection, WithHeadings
     {
         return Certificate::all();
     }
+
+    /**
+     * Define headings for export
+     *
+     * @return array
+     */
     public function headings(): array
     {
         return [
             'DB ID',
             'Certificate Number',
             'Inspector',
-            'Client',
+            'Client Name',
             'Inspection Type',
-            'Location',
+            'Inspection Location',
             'Equipment Name',
-            'Brand/Manufacturer',
-            'Serial/Chassis no.',
+            'Equipment Brand',
+            'Serial/Chassis No',
             'Rated Capacity',
             'SWL',
             'Inspection Date',
             'Validity Date',
-            'Inspection Remarks',
+            'Remarks',
             'Internal Notes',
             'Created by',
+            'Created by ID',
+            'Review by',
+            'Review by ID',
+            'Approval by',
+            'Approval by ID',
+            'Status',
             'Updated by',
             'Deleted by',
             'Created at',
+            'Reviewed at',
+            'Approved at',
             'Updated at',
             'Deleted at',
         ];

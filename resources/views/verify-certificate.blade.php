@@ -1,165 +1,122 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TÜV Austria BIC CVS | Certificate Verification System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <style>
-      .wf-force-outline-none[tabindex="-1"]:focus {
-        outline: none;
-      }
+        body {
+            background-color: #f8f9fa;
+            font-size: 13px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding-top: 40px;
+        }
+        .form-control {
+            font-size: 14px;
+            padding: 10px;
+        }
+        .btn {
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 10px 15px;
+        }
+        h1, h3, h4 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td {
+            padding: 6px;
+        }
     </style>
-    <meta charset="utf-8" />
-    <title>Certificate Verification</title>
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <link
-      href={{ URL::asset('public/main.css'); }} 
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link rel="icon" href="#" sizes="32x32">
-    <link rel="icon" href="#" sizes="192x192">
-    <link rel="apple-touch-icon" href="#">
-  </head>
-  <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
-  <body>
-    <div class="section wf-section">
-      <img
-        src="images/TUV Austria Logo.png"
-        loading="lazy"
-        alt=""
-        class="image"
-        width="250"
-      />
-      <h1 class="heading">Verify Inspection Certificate</h1>
-      <p class="paragraph">
-        Enter the Certificate Number and click the "Verify"&nbsp;button.
-      </p>
-      <div class="form-block w-form">
-        <form
-          id="s-form"
-          name="s-form"
-          method="get"
-          class="form"
-          aria-label="Search Form"
-        >
-          <input
-            type="text"
-            class="text-field w-input"
-            maxlength="256"
-            name="search"
-            placeholder="Ex: TUV/CERT/2022/0911/001"
-            id="search"
-            required=""
-          /><input
-            type="submit"
-            value="VERIFY"
-            data-wait="Please wait..."
-            class="submit-button w-button"
-          />
-        </form>
-        <div
-          class="w-form-done"
-          tabindex="-1"
-          role="region"
-          aria-label="Form success"
-        >
-          <div>Thank you! Your submission has been received!</div>
+</head>
+<body>
+    <div class="container">
+        <div class="text-center mb-4">
+            <img src="images/TUV Austria Logo.png" alt="TUV Logo" width="250">
+            <h1>Verify Inspection Certificate</h1>
+            <p>Enter the Certificate Number and click the "Verify" button.</p>
         </div>
-        <div
-          class="w-form-fail"
-          tabindex="-1"
-          role="region"
-          aria-label="Email Form failure"
-        >
-          <div>Oops! Something went wrong while submitting the form.</div>
-        </div>
-      </div>
-      @isset($certificates)
-      <div style="margin-right: 100px;">
-      @if($certificates->count() < 1)
-        <h3 style="text-align: center;">⚠️ The Certificate You Entered is Invalid or Manipulated. Please contact TUV Austria for futher inquiry. ⚠️</h3>
-        </br>
-        <h3 style="text-align: center;">⚠️ Tel: +88 02 8836403 ; Email: info@tuvat.com.bd ⚠️</h3>
-      @endif
-      @foreach ($certificates as $certificate)
 
-        <div style="padding-left: 10px; padding-right: 10px;">
-              @if (empty($certificate->validity_date) || ! \Carbon\Carbon::parse($certificate->validity_date)->isPast())
-                  <h3 style="color: green; text-align: center;">Certificate Authentic and Valid! ✅</h3>
-              @else
-                  <h3 style="color: red; text-align: center;">Certificate Authentic but Expired! ⚠️</h3>
-              @endif
-              <br>
-              <table style="width: 100%; border-collapse: collapse;">
-                  <tr>
-                      <td style="padding: 6px;"><h3><strong>Certificate Number</strong></h3></td>
-                      <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3>{{ $certificate->certificate_number }}</h3></td>
-                  </tr>
-                  <tr>
-                      <td style="padding: 6px;"><h3><strong>Client</strong></h3></td>
-                      <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3>{{ $certificate->client_name }}</h3></td>
-                  </tr>
-                  <tr>
-                      <td style="padding: 6px;"><h3><strong>Inspection Type</strong></h3></td>
-                      <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3>{{ $certificate->inspection_type }}</h3></td>
-                  </tr>
-                  <tr>
-                      <td style="padding: 6px;"><h3><strong>Inspection Location</strong></h3></td>
-                      <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3>{{ $certificate->inspection_location }}</h3></td>
-                  </tr>
-                  <tr>
-                      <td style="padding: 6px;"><h3><strong>Equipment/Item</strong></h3></td>
-                      <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3>{{ $certificate->equipment_name }}</h3></td>
-                  </tr>
-                  <tr>
-                      <td style="padding: 6px;"><h3><strong>Manufacturer</strong></h3></td>
-                      <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3>{{ $certificate->equipment_brand }}</h3></td>
-                  </tr>
-                  <tr>
-                      <td style="padding: 6px;"><h3><strong>Serial/Chassis No.</strong></h3></td>
-                      <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3>{{ $certificate->equipment_serial_chassis }}</h3></td>
-                  </tr>
-                  <tr>
-                      <td style="padding: 6px;"><h3><strong>Rated Capacity</strong></h3></td>
-                      <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3>{{ $certificate->equipment_rated_capacity }}</h3></td>
-                  </tr>
-                  <tr>
-                      <td style="padding: 6px;"><h3><strong>Safe Working Load</strong></h3></td>
-                      <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3>{{ $certificate->equipment_swl }}</h3></td>
-                  </tr>
-                  <tr>
-                      <td style="padding: 6px;"><h3><strong>Inspection Date</strong></h3></td>
-                      <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;"><h3>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->inspection_date)->format('d M Y') }}</h3></td>
-                  </tr>
-                  <tr>
-                      <td style="padding: 6px;"><h3><strong>Valid till</strong></h3></td>
-                      <td style="padding: 6px;"><h3>:</h3></td>
-                      <td style="padding: 6px;">
-                        <h3>
-                            @if (!empty($certificate->validity_date))
-                                {{ \Carbon\Carbon::createFromFormat('Y-m-d', $certificate->validity_date)->format('d M Y') }}
-                            @else
-                                No Expiry Date
-                            @endif
-                        </h3>
-                      </td>
-                  </tr>
-              </table>
-        </div>
-      
-      @endforeach
-      </div>
-      @endisset
+        <form id="s-form" method="get" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="search" id="search" class="form-control" placeholder="Ex: INSP-TUVAT-2025-0725-001" required>
+                <button class="btn btn-primary" type="submit">VERIFY</button>
+            </div>
+        </form>
+
+        @isset($certificates)
+            <div>
+                @if($certificates->count() < 1)
+                    <div class="alert alert-warning text-center">
+                        ⚠️ No records of the certificate number you entered can be found in our database. ⚠️<br>
+                        Please contact us for further inquiry or clarification. <br>
+                        Tel: +88 02 8836403 ; Email: info@tuvat.com.bd 
+                    </div>
+                @endif
+
+                @foreach ($certificates as $certificate)
+                    <div class="mb-4">
+                        @if ($certificate->status == 'Deleted')
+                            <h3 class="text-danger">This certificate has been deleted and is no longer valid. ❌</h3>
+                        @elseif (empty($certificate->validity_date) || ! \Carbon\Carbon::parse($certificate->validity_date)->isPast())
+                            <h3 class="text-success">Certificate Authentic and Valid! ✅</h3>
+                            <h6><center>Please verify the details below:</center></h6>
+                        @else
+                            <h3 class="text-warning">Certificate Authentic but Expired! ⚠️</h3>
+                        @endif
+
+                        <table class="table table-bordered mt-3">
+                            <tr><td><strong>Certificate Number</strong></td><td>{{ $certificate->certificate_number }}</td></tr>
+                            <tr><td><strong>Inspector</strong></td><td>{{ $certificate->inspector }}</td></tr>
+                            <tr><td><strong>Client Name</strong></td><td>{{ $certificate->client_name }}</td></tr>
+                            <tr><td><strong>Inspection Type</strong></td><td>{{ $certificate->inspection_type }}</td></tr>
+                            <tr><td><strong>Inspection Location</strong></td><td>{{ $certificate->inspection_location }}</td></tr>
+                            <tr><td><strong>Equipment Name</strong></td><td>{{ $certificate->equipment_name }}</td></tr>
+                            <tr><td><strong>Equipment Brand</strong></td><td>{{ $certificate->equipment_brand ?? 'N/A' }}</td></tr>
+                            <tr><td><strong>Serial/Chassis No.</strong></td><td>{{ $certificate->equipment_serial_chassis ?? 'N/A' }}</td></tr>
+                            <tr><td><strong>Rated Capacity</strong></td><td>{{ $certificate->equipment_rated_capacity ?? 'N/A' }}</td></tr>
+                            <tr><td><strong>SWL</strong></td><td>{{ $certificate->equipment_swl ?? 'N/A' }}</td></tr>
+                            <tr><td><strong>Inspection Date</strong></td><td>{{ \Carbon\Carbon::parse($certificate->inspection_date)->format('d M Y') }}</td></tr>
+                            <tr>
+                                <td><strong>Validity Date</strong></td>
+                                <td>
+                                    @if (!empty($certificate->validity_date))
+                                        {{ \Carbon\Carbon::parse($certificate->validity_date)->format('d M Y') }}
+                                    @else
+                                        No Expiry Date
+                                    @endif
+                                </td>
+                            </tr>
+                        </table>
+
+                        @if ($certificate->certificate_pdf)
+                            <div class="text-center mt-3 mb-4">
+                                <a href="{{ route('certificate.downloadPdf', $certificate->id) }}" class="btn btn-secondary" target="_blank">
+                                    <i class="fa-solid fa-file-pdf me-1"></i> Download Certificate PDF
+                                </a>
+                            </div>
+                        @else
+                            <div class="alert alert-warning text-center">
+                                Certificate is not available for download.
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        @endisset
+
+        @include('layouts.footer')
     </div>
-    @include('layouts.footer')  <!-- Including the footer Blade file -->
-  </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

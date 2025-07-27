@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Certificate;
 
 class User extends Authenticatable
 {
@@ -20,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'department',
         'designation',
         'password',
     ];
@@ -42,4 +44,36 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Relationship: Certificates Created by the User
+     */
+    public function certificatesCreated()
+    {
+        return $this->hasMany(\App\Models\Certificate::class, 'created_by_id');
+    }
+
+    /**
+     * Relationship: Certificates Reviewed by the User
+     */
+    public function certificatesReviewed()
+    {
+        return $this->hasMany(\App\Models\Certificate::class, 'review_by_id');
+    }
+
+    /**
+     * Relationship: Certificates Approved by the User
+     */
+    public function certificatesApproved()
+    {
+        return $this->hasMany(\App\Models\Certificate::class, 'approval_by_id');
+    }
+
+    /**
+     * Relationship: Certificates Uploaded by the User
+     */
+    public function certificatesUploaded()
+    {
+        return $this->hasMany(\App\Models\Certificate::class, 'pdf_uploaded_by_id');
+    }
 }
