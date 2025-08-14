@@ -182,7 +182,27 @@
                             </td>
                         </tr>
                         <tr><th>Review By</th><td>{{ $certificate->review_by }}</td></tr>
+                        <tr>
+                            <th>Reviewed on</th>
+                            <td>
+                                @if ($certificate->review_by)
+                                    {{ $certificate->reviewed_at ? $certificate->reviewed_at->format('d M Y \a\t H:i:s') : 'Not yet reviewed' }}
+                                @else
+                                    Not yet reviewed
+                                @endif
+                            </td>
+                        </tr>
                         <tr><th>Approval By</th><td>{{ $certificate->approval_by }}</td></tr>
+                        <tr>
+                            <th>Approved on</th>
+                            <td>
+                                @if ($certificate->approval_by)
+                                    {{ $certificate->approved_at ? $certificate->approved_at->format('d M Y \a\t H:i:s') : 'Not yet approved' }}
+                                @else
+                                    Not yet approved
+                                @endif
+                            </td>
+                        <tr>
                         <tr>
                             <th>QR Code</th>
                             <td>
@@ -197,7 +217,25 @@
                         <tr><th>Created On</th><td>{{ $certificate->created_at->format('d M Y \a\t H:i:s') }}</td></tr>
                         <tr><th>Last Updated By</th><td>{{ $certificate->updated_by }}</td></tr>
                         <tr><th>Updated On</th><td>{{ $certificate->updated_at ? $certificate->updated_at->format('d M Y \a\t H:i:s') : '' }}</td></tr>
-                        <tr><th>Deleted By</th><td>{{ $certificate->deleted_by }}</td></tr>
+                        <tr><th>Deleted by</th>
+                            <td>
+                                @if ($certificate->status === 'Deleted')
+                                    {{ $certificate->deleted_by }}
+                                @else
+                                    N/A
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Deleted on</th>
+                            <td>
+                                @if ($certificate->deleted_by)
+                                    {{ $certificate->deleted_at ? $certificate->deleted_at->format('d M Y \a\t H:i:s') : 'N/A' }}
+                                @else
+                                    N/A
+                                @endif
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
