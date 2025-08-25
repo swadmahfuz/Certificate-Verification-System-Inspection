@@ -10,7 +10,7 @@ class Certificate extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'inspection_certificates';
+    protected $table = 'certificates_inspection';
 
     protected $guarded = [];
 
