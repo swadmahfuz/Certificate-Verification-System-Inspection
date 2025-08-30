@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '899da64c4686e8d29742578d22f0d088954b12b0',
+        'reference' => '39a5636ff178c0b8c2bcb57be4372c43b5295846',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -60,6 +60,15 @@
             'replaced' => array(
                 0 => '*',
             ),
+        ),
+        'davcpas1234/laravelpdfviewer' => array(
+            'pretty_version' => '1.0.1',
+            'version' => '1.0.1.0',
+            'reference' => 'be0a3a8ff9719708cc62a12db091551ba91c2f5f',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../davcpas1234/laravelpdfviewer',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'davedevelopment/hamcrest-php' => array(
             'dev_requirement' => true,
@@ -433,7 +442,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '899da64c4686e8d29742578d22f0d088954b12b0',
+            'reference' => '39a5636ff178c0b8c2bcb57be4372c43b5295846',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -853,8 +862,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0',
-                1 => '1.0.0 || 2.0.0 || 3.0.0',
+                0 => '1.0.0 || 2.0.0 || 3.0.0',
+                1 => '1.0|2.0',
             ),
         ),
         'psr/simple-cache' => array(
