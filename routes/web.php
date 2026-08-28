@@ -1,6 +1,12 @@
 <?php
 
+use App\Http\Controllers\AccountPasswordController;
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\NoAccessController;
+use App\Http\Controllers\UserManagementController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -9,54 +15,101 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | These are the routes for the Inspection Certificate Verification System.
-| Ensure all logic is role-protected inside the controller.
+| Public verification stays open. Admin management routes are protected
+| with the auth middleware group below.
 |
 */
 
 // --- Public Routes ---
 Route::get('/', [CertificateController::class, 'search'])->name('certificate.search');
 
-/// --- Authentication ---
-Auth::routes(['register' => false]);
-Route::get('/reset', function () { return view('auth.passwords.email'); });
-Route::get('/admin', function () { return Auth::check() ? redirect()->route('dashboard') : view('login'); });
-Route::get('/login', function () { return Auth::check() ? redirect()->route('dashboard') : view('login'); });
-Route::post('/login/addCredentials', [CertificateController::class, 'addCredentials'])->name('certificate.login');
-Route::get('/logout', [CertificateController::class, 'logout']);
-///If login page layout changes, remember to update /admin and /login 
+// --- Authentication ---
+Auth::routes([
+    'register' => config('cvs.registration_enabled', false),
+    'verify' => true,
+]);
+Route::get('/reset', function () {
+    return view('auth.passwords.email');
+});
+Route::get('/admin', function () {
+    return Auth::check() ? redirect()->route('dashboard') : view('login');
+});
+Route::get('/login', function () {
+    return Auth::check() ? redirect()->route('dashboard') : view('login');
+})->name('login');
+Route::post('/login/addCredentials', [CertificateController::class, 'addCredentials'])
+    ->middleware('guest')
+    ->name('certificate.login');
 
-/// --- Admin/Authorized Routes ---
-Route::get('/dashboard', [CertificateController::class, 'getDashboard'])->name('dashboard');
-Route::get('/pending-certificates', [CertificateController::class, 'getPendingCertificates'])->name('pendingCertificates');
-Route::get('/deleted-certificates', [CertificateController::class, 'getDeletedCertificates'])->name('deletedCertificates');
-Route::get('/add-certificate', [CertificateController::class, 'addCertificate']);
-Route::post('/add-certificate', [CertificateController::class, 'createCertificate'])->name('certificate.create');
-Route::get('/view-certificate/{id}', [CertificateController::class, 'viewCertificate']);
-Route::get('/edit-certificate/{id}', [CertificateController::class, 'editCertificate']);
-Route::post('/update-certificate', [CertificateController::class, 'updateCertificate'])->name('certificate.update');
-Route::get('/delete-certificate/{id}', [CertificateController::class, 'deleteCertificate']);
-Route::get('/admin-search', [CertificateController::class, 'adminSearch'])->name('certificate.adminSearch');
+// --- Authenticated Routes ---
+Route::middleware(['auth', 'user.active'])->group(function () {
+    Route::get('/account/password', [AccountPasswordController::class, 'edit'])->name('account.password.edit');
+    Route::post('/account/password', [AccountPasswordController::class, 'update'])->name('account.password.update');
 
-    /// --- Review & Approval ---
-Route::get('/review-certificate/{id}', [CertificateController::class, 'reviewCertificate'])->name('certificate.review');
-Route::get('/approve-certificate/{id}', [CertificateController::class, 'approveCertificate'])->name('certificate.approve');
-Route::get('/bulk-review', [CertificateController::class, 'bulkReview'])->name('bulkReview');
-Route::get('/bulk-approve', [CertificateController::class, 'bulkApprove'])->name('bulkApprove');
+    Route::middleware(['verified', 'password.changed'])->group(function () {
+        Route::get('/no-access', NoAccessController::class)->name('no-access');
 
-    /// --- PDF Handling ---
-Route::post('/upload-pdf/{id}', [CertificateController::class, 'uploadPdf'])->name('certificate.uploadPdf');
-Route::get('/download-pdf/{id}', [CertificateController::class, 'downloadPdf'])->name('certificate.downloadPdf');
-Route::get('/view-pdf/{id}', [CertificateController::class, 'viewPdf'])->name('certificate.viewPdf');
+        Route::middleware('super.admin')->prefix('admin')->name('admin.')->group(function () {
+            Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
+            Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
+            Route::post('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
+            Route::post('/departments/{department}/toggle', [DepartmentController::class, 'toggleStatus'])->name('departments.toggle');
 
-    /// --- Import/Export ---
-Route::get('/imports-exports', [CertificateController::class, 'importExportView']);
-Route::get('/export', [CertificateController::class, 'export'])->name('export');
-Route::post('/import', [CertificateController::class, 'import'])->name('import');
+            Route::get('/users', [UserManagementController::class, 'index'])->name('users.index');
+            Route::get('/users/create', [UserManagementController::class, 'create'])->name('users.create');
+            Route::post('/users', [UserManagementController::class, 'store'])->name('users.store');
+            Route::get('/users/{user}/edit', [UserManagementController::class, 'edit'])->name('users.edit');
+            Route::put('/users/{user}', [UserManagementController::class, 'update'])->name('users.update');
+            Route::post('/users/{user}/send-password-reset', [UserManagementController::class, 'sendPasswordReset'])->name('users.send-password-reset');
+            Route::get('/users/{user}/permissions', [UserManagementController::class, 'editPermissions'])->name('users.permissions.edit');
+            Route::post('/users/{user}/permissions', [UserManagementController::class, 'updatePermissions'])->name('users.permissions.update');
+        });
 
-    /// --- Live Search  ---
-Route::get('/live-search', [CertificateController::class, 'liveSearch'])->name('liveSearch');
-Route::get('/live-search-pending', [CertificateController::class, 'liveSearchPending'])->name('liveSearchPending');
-Route::get('/live-search-deleted', [CertificateController::class, 'liveSearchDeleted'])->name('liveSearchDeleted');
+        Route::middleware('app.access')->group(function () {
+            Route::get('/dashboard', [CertificateController::class, 'getDashboard'])->name('dashboard');
+            Route::get('/certificates', [CertificateController::class, 'indexCertificates'])->name('certificates.index');
+            Route::get('/pending-certificates', [CertificateController::class, 'getPendingCertificates'])->name('pendingCertificates');
+            Route::get('/deleted-certificates', [CertificateController::class, 'getDeletedCertificates'])->name('deletedCertificates');
 
-    /// --- Admin View (optional user list) ---
-Route::get('/all-users', [CertificateController::class, 'showAllUsers'])->name('allUsers');
+            Route::get('/add-certificate', [CertificateController::class, 'addCertificate'])->name('certificate.createForm');
+            Route::get('/view-certificate/{id}', [CertificateController::class, 'viewCertificate'])->name('certificate.view');
+            Route::get('/edit-certificate/{id}', [CertificateController::class, 'editCertificate'])->name('certificate.edit');
+
+            Route::get('/download-pdf/{id}', [CertificateController::class, 'downloadPdf'])->name('certificate.downloadPdf');
+            Route::get('/view-pdf/{id}', [CertificateController::class, 'viewPdf'])->name('certificate.viewPdf');
+
+            Route::get('/imports-exports', [CertificateController::class, 'importExportView'])->name('importsExports');
+
+            Route::get('/live-search', [CertificateController::class, 'liveSearch'])->name('liveSearch');
+            Route::get('/live-search-pending', [CertificateController::class, 'liveSearchPending'])->name('liveSearchPending');
+            Route::get('/live-search-deleted', [CertificateController::class, 'liveSearchDeleted'])->name('liveSearchDeleted');
+
+            Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
+
+            Route::middleware('app.mutate')->group(function () {
+                Route::post('/add-certificate', [CertificateController::class, 'createCertificate'])->name('certificate.create');
+                Route::post('/update-certificate', [CertificateController::class, 'updateCertificate'])->name('certificate.update');
+                Route::delete('/delete-certificate/{id}', [CertificateController::class, 'deleteCertificate'])
+                    ->name('certificate.delete');
+                Route::post('/certificates/bulk-delete', [CertificateController::class, 'bulkDeleteSelected'])
+                    ->name('certificates.bulkDelete');
+
+                Route::post('/review-certificate/{id}', [CertificateController::class, 'reviewCertificate'])
+                    ->name('certificate.review');
+                Route::post('/approve-certificate/{id}', [CertificateController::class, 'approveCertificate'])
+                    ->name('certificate.approve');
+                Route::post('/bulk-review', [CertificateController::class, 'bulkReview'])->name('bulkReview');
+                Route::post('/bulk-approve', [CertificateController::class, 'bulkApprove'])->name('bulkApprove');
+                Route::post('/certificates/bulk-review', [CertificateController::class, 'bulkReviewSelected'])
+                    ->name('certificates.bulkReviewSelected');
+                Route::post('/certificates/bulk-approve', [CertificateController::class, 'bulkApproveSelected'])
+                    ->name('certificates.bulkApproveSelected');
+
+                Route::post('/upload-pdf/{id}', [CertificateController::class, 'uploadPdf'])->name('certificate.uploadPdf');
+
+                Route::get('/export', [CertificateController::class, 'export'])->name('export');
+                Route::post('/import', [CertificateController::class, 'import'])->name('import');
+            });
+        });
+    });
+});

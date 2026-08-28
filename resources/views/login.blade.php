@@ -39,11 +39,17 @@
 <body>
     <div class="login-container">
         <div class="card p-4">
-            <h5 class="text-center mb-3">Certificate Verification System (CVS)<br> Login</h5>
+            <h5 class="text-center mb-3">Inspection Certificate Verification System (CVS)<br> Login</h5>
 
             @if(session('error'))
                 <div class="alert alert-danger text-center">
                     {{ session('error') }}
+                </div>
+            @endif
+
+            @if(session('success'))
+                <div class="alert alert-success text-center">
+                    {{ session('success') }}
                 </div>
             @endif
 
@@ -61,6 +67,12 @@
                     <button type="submit" class="btn btn-primary">Log in</button>
                 </div>
             </form>
+
+            @if(config('cvs.registration_enabled') && Route::has('register'))
+                <div class="text-center mt-3">
+                    <a href="{{ route('register') }}">Create an account</a>
+                </div>
+            @endif
         </div>
     </div>
 
