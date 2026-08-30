@@ -5,19 +5,26 @@
 @section('content')
 <div class="page-heading">
     <div>
-        <h1>Certificates</h1>
-        <p>Search, verify, and manage all inspection certificates.</p>
+        <h1>{{ $filterLabels['title'] ?? 'Certificates' }}</h1>
+        <p>{{ $filterLabels['subtitle'] ?? 'Search, verify, and manage all inspection certificates.' }}</p>
+        @if(!empty($filter))
+            <a class="small" href="{{ route('certificates.index') }}">Clear filter</a>
+        @endif
     </div>
-    @canMutate
-    <a class="btn btn-primary" href="{{ route('certificate.createForm') }}">
-        <i class="fa-solid fa-plus me-1"></i> Add Certificate
-    </a>
-    @endcanMutate
+    <x-admin.disabled-action
+        permission="mutate"
+            :href="route('certificate.createForm')"
+        :message="\App\Services\PermissionService::deniedMessage()"
+        variant="button"
+        class="btn-primary"
+        icon="fa-plus">
+        Add Certificate
+    </x-admin.disabled-action>
 </div>
 
 <section class="admin-card">
     <div class="admin-card-header">
-        <h2>All Certificates</h2>
+        <h2>{{ $filterLabels['title'] ?? 'All Certificates' }}</h2>
         <div class="toolbar">
             <div class="input-group input-group-sm">
                 <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
@@ -127,6 +134,7 @@ $(function () {
     var deleteBase = @json(url('/delete-certificate'));
     var canMutate = @json(auth()->check() && app(\App\Services\PermissionService::class)->canMutate());
     var tableColspan = canMutate ? 12 : 11;
+    var listFilter = @json($filter ?? '');
     var selectionStorageKey = 'certificates.selectedIds';
     var pendingBulkAction = null;
 
@@ -232,7 +240,7 @@ $(function () {
         userInput = userInput || '';
         $.ajax({
             url: @json(route('liveSearch')),
-            data: { userInput: userInput, page: page },
+            data: { userInput: userInput, page: page, filter: listFilter },
             dataType: 'json',
             beforeSend: function () {
                 $('.search-result tbody').html('<tr><td colspan="' + tableColspan + '" class="text-center text-muted py-4">Searching...</td></tr>');

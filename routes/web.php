@@ -114,8 +114,6 @@ Route::middleware(['auth', 'user.active'])->group(function () {
 
 
 
-            Route::get('/users', [UserManagementController::class, 'index'])->name('users.index');
-
             Route::get('/users/create', [UserManagementController::class, 'create'])->name('users.create');
 
             Route::post('/users', [UserManagementController::class, 'store'])->name('users.store');
@@ -138,6 +136,8 @@ Route::middleware(['auth', 'user.active'])->group(function () {
         Route::middleware('app.access')->group(function () {
 
             Route::get('/dashboard', [CertificateController::class, 'getDashboard'])->name('dashboard');
+
+            Route::get('/admin/users', [UserManagementController::class, 'index'])->name('admin.users.index');
 
             Route::get('/certificates', [CertificateController::class, 'indexCertificates'])->name('certificates.index');
 

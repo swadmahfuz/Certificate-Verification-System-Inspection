@@ -25,6 +25,10 @@ return [
         'permissions' => (int) env('CVS_PERMISSIONS_CACHE_TTL', 900),
     ],
 
+    'certificate_filters' => [
+        'expiry_column' => 'validity_date',
+    ],
+
     'certificate_search' => [
         'like' => [
             'certificate_number',

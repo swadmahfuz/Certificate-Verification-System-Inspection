@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Http\Requests\LoginRequest;
 use App\Jobs\ProcessCertificateImportJob;
 use App\Services\CertificateSearchService;
+use App\Services\CertificateFilterService;
 use App\Services\DashboardService;
 use App\Services\ActivityLogService;
 use App\Services\PermissionService;
@@ -91,11 +92,21 @@ class CertificateController extends Controller
         return view('dashboard', $dashboardService->data());
     }
 
-    public function indexCertificates()
+    public function indexCertificates(Request $request, CertificateFilterService $filterService)
     {
-        $certificates = Certificate::orderBy('created_at', 'DESC')->orderBy('id', 'DESC')->paginate(100);
+        $filter = $request->query('filter');
+        $query = Certificate::query();
+        $filterService->applyFilter($query, $filter);
 
-        return view('certificates.index', compact('certificates'));
+        $certificates = $query
+            ->orderBy('created_at', 'DESC')
+            ->orderBy('id', 'DESC')
+            ->paginate(100)
+            ->withQueryString();
+
+        $filterLabels = $filterService->filterLabels($filter);
+
+        return view('certificates.index', compact('certificates', 'filter', 'filterLabels'));
     }
 
     public function getDeletedCertificates()
@@ -626,12 +637,16 @@ class CertificateController extends Controller
         ]);
     }
 
-    public function liveSearch(Request $request, CertificateSearchService $searchService)
+    public function liveSearch(Request $request, CertificateSearchService $searchService, CertificateFilterService $filterService)
     {
         $perPage = 100;
         $userInput = (string) ($request->input('userInput') ?? '');
+        $filter = $request->query('filter');
 
-        $result = $searchService->paginate(Certificate::query(), $userInput, $perPage);
+        $query = Certificate::query();
+        $filterService->applyFilter($query, $filter);
+
+        $result = $searchService->paginate($query, $userInput, $perPage);
 
         return response()->json(['data' => $result]);
     }
