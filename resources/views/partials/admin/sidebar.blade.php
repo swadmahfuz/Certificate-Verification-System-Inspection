@@ -49,9 +49,11 @@
             <i class="fa-solid fa-building"></i><span>Departments</span>
         </a>
         @endsuperAdmin
+        @superAdmin
         <a class="sidebar-link {{ request()->routeIs('activity-log.*') ? 'active' : '' }}" href="{{ route('activity-log.index') }}">
             <i class="fa-solid fa-clock-rotate-left"></i><span>Activity Log</span>
         </a>
+        @endsuperAdmin
 
         @php
             $host = strtolower(request()->getHost());
